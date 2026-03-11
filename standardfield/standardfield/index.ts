@@ -23,6 +23,11 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
         container: HTMLDivElement
     ): void {
         // Add control initialization code
+        console.log('init');
+        var x = document.createElement("input");
+        x.setAttribute("type", "text");
+        x.setAttribute("value", "Hello from PCF");
+        container.appendChild(x);
     }
 
 
@@ -32,6 +37,7 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
+        console.log('updateView');
     }
 
     /**
@@ -39,6 +45,7 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
      */
     public getOutputs(): IOutputs {
+        console.log('getOutputs');
         return {};
     }
 
@@ -48,5 +55,6 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      */
     public destroy(): void {
         // Add code to cleanup control if necessary
+        console.log('destroy');
     }
 }
