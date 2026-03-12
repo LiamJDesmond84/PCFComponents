@@ -1,6 +1,13 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 
 export class standardfield implements ComponentFramework.StandardControl<IInputs, IOutputs> {
+
+    // input field in the container (main page) (used below to create element)
+    private _inputElement: HTMLInputElement;
+
+    // input field on the right side of the page
+    // sampleProperty
+
     /**
      * Empty constructor.
      */
@@ -23,11 +30,19 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
         container: HTMLDivElement
     ): void {
         // Add control initialization code
-        console.log('init');
-        var x = document.createElement("input");
-        x.setAttribute("type", "text");
-        x.setAttribute("value", "Hello from PCF");
-        container.appendChild(x);
+        this._inputElement = document.createElement("input") as HTMLInputElement;
+        this._inputElement.setAttribute("type", "text");
+        this._inputElement.setAttribute("value", context.parameters.sampleProperty.raw || "");
+        container.appendChild(this._inputElement);
+
+        // var x = document.createElement("input");
+        // x.setAttribute("type", "text");
+        // x.setAttribute("value", context.parameters.sampleProperty.raw || "");
+        // container.appendChild(x);
+
+        this._inputElement.addEventListener("input", () => {
+            notifyOutputChanged();
+        });
     }
 
 
@@ -37,7 +52,7 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
-        console.log('updateView');
+        this._inputElement.value = context.parameters.sampleProperty.raw || "";
     }
 
     /**
@@ -45,8 +60,10 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
      */
     public getOutputs(): IOutputs {
-        console.log('getOutputs');
-        return {};
+
+        return {
+            sampleProperty: this._inputElement.value
+        };
     }
 
     /**
