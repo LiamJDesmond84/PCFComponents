@@ -6,6 +6,9 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
     /**
      * Empty constructor.
      */
+
+    private _container: HTMLDivElement;
+    
     constructor() {
         // Empty
     }
@@ -25,6 +28,9 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
         container: HTMLDivElement
     ): void {
         // Add control initialization code
+
+        this._container = container;
+        
     }
 
 
@@ -34,6 +40,31 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
+
+        this._container.innerHTML = "";
+        let table = document.createElement("table");
+        let tr = document.createElement("tr");
+
+        context.parameters.sampleDataSet.columns.forEach(column => {
+            let td = document.createElement("td");
+            td.appendChild(document.createTextNode(column.displayName));
+            tr.appendChild(td);
+        });
+
+        table.appendChild(tr);
+        
+        context.parameters.sampleDataSet.sortedRecordIds.forEach(recordId => {
+            let tr = document.createElement("tr");
+            context.parameters.sampleDataSet.columns.forEach(column => {
+                let td = document.createElement("td");
+                td.appendChild(document.createTextNode(context.parameters.sampleDataSet.records[recordId].getFormattedValue(column.name)));
+                tr.appendChild(td);
+
+            })
+
+            table.appendChild(tr);
+    });
+        this._container.appendChild(table);
     }
 
     /**
