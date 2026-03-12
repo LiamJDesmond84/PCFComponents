@@ -3,7 +3,6 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 export class standardfield implements ComponentFramework.StandardControl<IInputs, IOutputs> {
 
     // input field in the container (main page) (used below to create element)
-    private _inputElement: HTMLInputElement;
 
     // input field on the right side of the page
     // sampleProperty
@@ -30,19 +29,27 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
         container: HTMLDivElement
     ): void {
         // Add control initialization code
-        this._inputElement = document.createElement("input") as HTMLInputElement;
-        this._inputElement.setAttribute("type", "text");
-        this._inputElement.setAttribute("value", context.parameters.sampleProperty.raw || "");
-        container.appendChild(this._inputElement);
+        const button: HTMLButtonElement = document.createElement("button");
+        button.innerText = "Click me";
+        button.addEventListener("click", () => {
+            alert("Button clicked!");
+            const alertString = {confirmButtonLabel: "OK", text: "Hello World!!!!", title: "Hello World Title"};
+            const alertOptions = { height: 200, width: 400 };
+            context.navigation.openAlertDialog(alertString, alertOptions).then((result) => {
+                function success() {
+                    console.log("Alert dialog closed successfully.");
+                } 
+                function error() {
+                    console.log("Error closing alert dialog.");
+                }
+                return null;
+            }).catch((error) => {
+                return null;
+            });
 
-        // var x = document.createElement("input");
-        // x.setAttribute("type", "text");
-        // x.setAttribute("value", context.parameters.sampleProperty.raw || "");
-        // container.appendChild(x);
-
-        this._inputElement.addEventListener("input", () => {
-            notifyOutputChanged();
         });
+        container.appendChild(button);
+
     }
 
 
@@ -52,7 +59,9 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         // Add code to update control view
-        this._inputElement.value = context.parameters.sampleProperty.raw || "";
+        console.log("UPDATE VIEW");
+        
+
     }
 
     /**
@@ -62,7 +71,7 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
     public getOutputs(): IOutputs {
 
         return {
-            sampleProperty: this._inputElement.value
+
         };
     }
 
@@ -72,6 +81,6 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
      */
     public destroy(): void {
         // Add code to cleanup control if necessary
-        console.log('destroy');
+
     }
 }
