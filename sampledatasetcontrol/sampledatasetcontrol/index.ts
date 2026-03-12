@@ -46,15 +46,16 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
         let tr = document.createElement("tr");
 
         context.parameters.sampleDataSet.columns.forEach(column => {
-            let td = document.createElement("td");
-            td.appendChild(document.createTextNode(column.displayName));
-            tr.appendChild(td);
+            let th = document.createElement("th");
+            th.appendChild(document.createTextNode(column.displayName));
+            tr.appendChild(th);
+            table.appendChild(tr);
         });
 
-        table.appendChild(tr);
         
         context.parameters.sampleDataSet.sortedRecordIds.forEach(recordId => {
             let tr = document.createElement("tr");
+
             context.parameters.sampleDataSet.columns.forEach(column => {
                 let td = document.createElement("td");
                 td.appendChild(document.createTextNode(context.parameters.sampleDataSet.records[recordId].getFormattedValue(column.name)));
