@@ -32,22 +32,26 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
         const button: HTMLButtonElement = document.createElement("button");
         button.innerText = "Click me";
         button.addEventListener("click", () => {
-            alert("Button clicked!");
-            const alertString = {confirmButtonLabel: "OK", text: "Hello World!!!!", title: "Hello World Title"};
-            const alertOptions = { height: 200, width: 400 };
-            context.navigation.openAlertDialog(alertString, alertOptions).then((result) => {
-                function success() {
-                    console.log("Alert dialog closed successfully.");
-                } 
-                function error() {
-                    console.log("Error closing alert dialog.");
-                }
-                return null;
-            }).catch((error) => {
-                return null;
+            console.log('Creating Record');
+            context.webAPI.createRecord("account", { name: "Globex", telephone1: "425 555 1234", websiteurl: "www.globex.com" }).then(
+                function (entityId) {
+                    alert("Record created with ID: " + entityId.id);
+                },
+                function (error) {
+                    alert("Error creating record: " + error.message);    
             });
-
-        });
+            console.log('Retrieving Multiple Records');
+            
+            context.webAPI.retrieveMultipleRecords("account", "?$select=name,telephone1,websiteurl").then(result => {
+                console.log(result);
+            });
+            return null;
+        })
+        //     context.webAPI.retrieveRecord("account", "e0d42377-af34-ef11-840a-00224805cbd6", "?$select=name,address1_telephone2,websiteurl").then(result => {
+        //         alert(result);
+        //         return null;
+        //     });
+        // });
         container.appendChild(button);
 
     }

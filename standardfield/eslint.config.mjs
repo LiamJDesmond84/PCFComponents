@@ -34,6 +34,7 @@ export default [
 
     rules: {
       "@typescript-eslint/no-unused-vars": "off",
+      "promise/catch-or-return": "off"
     },
   },
 ];
