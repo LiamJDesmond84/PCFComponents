@@ -42,11 +42,11 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
         // Add code to update control view
 
         this._container.innerHTML = "";
-        let table = document.createElement("table");
-        let tr = document.createElement("tr");
+        const table = document.createElement("table");
+        const tr = document.createElement("tr");
 
         context.parameters.sampleDataSet.columns.forEach(column => {
-            let th = document.createElement("th");
+            const th = document.createElement("th");
             th.appendChild(document.createTextNode(column.displayName));
             tr.appendChild(th);
             table.appendChild(tr);
@@ -54,10 +54,11 @@ export class sampledatasetcontrol implements ComponentFramework.StandardControl<
 
         
         context.parameters.sampleDataSet.sortedRecordIds.forEach(recordId => {
-            let tr = document.createElement("tr");
+            const tr = document.createElement("tr");
 
+            // Dynimically get the value of each row of data in the cvs using the column headers
             context.parameters.sampleDataSet.columns.forEach(column => {
-                let td = document.createElement("td");
+                const td = document.createElement("td");
                 td.appendChild(document.createTextNode(context.parameters.sampleDataSet.records[recordId].getFormattedValue(column.name)));
                 tr.appendChild(td);
 
