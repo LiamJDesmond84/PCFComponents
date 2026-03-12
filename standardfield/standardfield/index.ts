@@ -35,15 +35,18 @@ export class standardfield implements ComponentFramework.StandardControl<IInputs
             console.log('Creating Record');
             context.webAPI.createRecord("account", { name: "Globex", telephone1: "425 555 1234", websiteurl: "www.globex.com" }).then(
                 function (entityId) {
-                    alert("Record created with ID: " + entityId.id);
+                    console.log("Record created with ID: " + entityId.id);
+                    return null;
                 },
                 function (error) {
-                    alert("Error creating record: " + error.message);    
+                    console.log("Error creating record: " + error.message);
+                    return null;
             });
             console.log('Retrieving Multiple Records');
             
             context.webAPI.retrieveMultipleRecords("account", "?$select=name,telephone1,websiteurl").then(result => {
                 console.log(result);
+                return null
             });
             return null;
         })
