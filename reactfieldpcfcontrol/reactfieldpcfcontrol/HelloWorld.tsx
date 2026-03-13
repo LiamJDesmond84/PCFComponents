@@ -12,7 +12,7 @@ export class HelloWorld extends React.Component<IHelloWorldProps> {
     return (
       <Input 
       value={this.props.name}
-      onChange={(e, newValue) => this.props.updateValue(newValue.value || '')}
+      onChange={(e, newValue) => this.props.updateValue(newValue.value ?? '')}
       />
     )
   }

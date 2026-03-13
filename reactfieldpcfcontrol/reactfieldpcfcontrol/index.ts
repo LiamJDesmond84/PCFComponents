@@ -34,7 +34,7 @@ export class reactfieldpcfcontrol implements ComponentFramework.ReactControl<IIn
      * @returns ReactElement root react element for the control
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: context.parameters.sampleProperty.raw || "", updateValue: this.updateValue.bind(this) };
+        const props: IHelloWorldProps = { name: context.parameters.sampleProperty.raw ?? "", updateValue: this.updateValue.bind(this) };
         return React.createElement(
             HelloWorld, props
         );
