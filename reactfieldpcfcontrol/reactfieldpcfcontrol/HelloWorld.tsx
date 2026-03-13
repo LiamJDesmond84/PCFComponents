@@ -1,5 +1,8 @@
+
 import * as React from 'react';
-import { Label } from '@fluentui/react-components';
+import { FC } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 import { Input } from '@fluentui/react-components';
 
 export interface IHelloWorldProps {
@@ -7,13 +10,19 @@ export interface IHelloWorldProps {
   updateValue: (value: string) => void;
 }
 
-export class HelloWorld extends React.Component<IHelloWorldProps> {
-  public render(): React.ReactNode {
-    return (
-      <Input 
-      value={this.props.name}
-      onChange={(e, newValue) => this.props.updateValue(newValue.value ?? '')}
-      />
-    )
-  }
-}
+export const HelloWorld: FC<IHelloWorldProps> = ({ name: propName, updateValue }) => {
+  const [name, setName] = useState<string>(propName ?? '');
+
+  useEffect(() => {
+    setName(propName ?? '');
+  }, [propName]);
+
+  return (
+    <Input
+      value={name}
+      onChange={(e, data) => {
+        updateValue(data.value ?? '');
+        setName(data.value ?? '')}}
+    />
+  );
+};
