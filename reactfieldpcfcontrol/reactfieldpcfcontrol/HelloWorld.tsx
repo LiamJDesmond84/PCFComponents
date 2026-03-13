@@ -1,6 +1,5 @@
 
 import * as React from 'react';
-import { FC } from 'react';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Input } from '@fluentui/react-components';
@@ -10,7 +9,7 @@ export interface IHelloWorldProps {
   updateValue: (value: string) => void;
 }
 
-export const HelloWorld: FC<IHelloWorldProps> = ({ name: propName, updateValue }) => {
+export const HelloWorld = ({ name: propName, updateValue }: IHelloWorldProps) => {
   const [name, setName] = useState<string>(propName ?? '');
 
   useEffect(() => {
