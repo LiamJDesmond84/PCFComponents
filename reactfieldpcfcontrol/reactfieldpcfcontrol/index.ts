@@ -4,6 +4,7 @@ import * as React from "react";
 
 export class reactfieldpcfcontrol implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private notifyOutputChanged: () => void;
+    private _value: string;
 
     /**
      * Empty constructor.
@@ -33,10 +34,15 @@ export class reactfieldpcfcontrol implements ComponentFramework.ReactControl<IIn
      * @returns ReactElement root react element for the control
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: 'Power Apps' };
+        const props: IHelloWorldProps = { name: context.parameters.sampleProperty.raw || "", updateValue: this.updateValue.bind(this) };
         return React.createElement(
             HelloWorld, props
         );
+    }
+
+    private updateValue(value: string) {
+        this._value = value;
+        this.notifyOutputChanged();
     }
 
     /**
@@ -44,7 +50,9 @@ export class reactfieldpcfcontrol implements ComponentFramework.ReactControl<IIn
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
      */
     public getOutputs(): IOutputs {
-        return { };
+        return { 
+            sampleProperty: this._value
+        };
     }
 
     /**
