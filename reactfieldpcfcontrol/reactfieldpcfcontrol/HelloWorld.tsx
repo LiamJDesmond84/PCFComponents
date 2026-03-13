@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { Input } from '@fluentui/react-components';
 
 export interface IHelloWorldProps {
-  name?: string;
+  name?: string
   updateValue: (value: string) => void;
 }
 
