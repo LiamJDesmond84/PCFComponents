@@ -19,6 +19,7 @@
     </external-service-usage>
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="sampleProperty" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
+    
     <property name="buttonName" display-name-key="buttonName" description-key="buttonName" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="relatedEntityLogicalName" display-name-key="relatedEntityLogicalName" description-key="relatedEntityLogicalName" of-type="SingleLine.Text" usage="input" required="true" />
     <property name="createEntityFromId" display-name-key="createEntityFromId" description-key="createEntityFromId" of-type="SingleLine.Text" usage="bound" required="true" />
@@ -38,7 +39,7 @@
     <resources>
       <code path="index.ts" order="1"/>
       <platform-library name="React" version="16.14.0" />
-      <platform-library name="Fluent" version="9.68.0" />
+      <platform-library name="Fluent" version="9.46.2" />
       <!-- UNCOMMENT TO ADD MORE RESOURCES
       <css path="css/reactCustomButton.css" order="1" />
       <resx path="strings/reactCustomButton.1033.resx" version="1.0.0" />
