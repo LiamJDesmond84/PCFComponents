@@ -19,6 +19,11 @@
     </external-service-usage>
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
     <property name="sampleProperty" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="buttonName" display-name-key="buttonName" description-key="buttonName" of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="relatedEntityLogicalName" display-name-key="relatedEntityLogicalName" description-key="relatedEntityLogicalName" of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="createEntityFromId" display-name-key="createEntityFromId" description-key="createEntityFromId" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="createEntityFromLogicalName" display-name-key="createEntityFromLogicalName" description-key="createEntityFromLogicalName" of-type="SingleLine.Text" usage="input" required="true" />
+    <property name="createEntityFromName" display-name-key="createEntityFromName" description-key="createEntityFromName" of-type="SingleLine.Text" usage="bound" required="true" />
     <!--
       Property node's of-type attribute can be of-type-group attribute.
       Example:

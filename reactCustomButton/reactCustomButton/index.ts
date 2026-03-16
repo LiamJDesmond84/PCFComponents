@@ -1,6 +1,7 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import { CustomButton, ICustomButtonProps } from "./HelloWorld";
+import { CustomButton, ICustomButtonProps } from "./CustomButton";
 import * as React from "react";
+import { setContext } from "./services/DataverseServices";
 
 export class reactCustomButton implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private notifyOutputChanged: () => void;
@@ -34,6 +35,7 @@ export class reactCustomButton implements ComponentFramework.ReactControl<IInput
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
         const props: ICustomButtonProps = { name: 'Power Apps' };
+        setContext(context);
         return React.createElement(
             CustomButton, props
         );
