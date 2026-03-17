@@ -25,3 +25,18 @@ export const HelloWorld = ({ name: propName, updateValue }: IHelloWorldProps) =>
     />
   );
 };
+
+
+// export interface IHelloWorldProps {
+//   name?: string;
+//   updateValue?: (value: string) => void;
+// }
+
+// export const HelloWorld = ({name, updateValue}: IHelloWorldProps) => {
+//   return (
+//     <Input
+//     value={name}
+//     onChange={(e, val) => val ? updateValue?.(val.value) : undefined}
+//     />
+//   );
+// };
