@@ -5,12 +5,10 @@ export interface IHelloWorldProps {
   name?: string;
 }
 
-export class HelloWorld extends React.Component<IHelloWorldProps> {
-  public render(): React.ReactNode {
-    return (
-      <Label>
-        Hello {this.props.name}!
-      </Label>
-    )
-  }
-}
+export const HelloWorld = (props: IHelloWorldProps) => {
+  return (
+    <Label>
+      Hello {props.name}!
+    </Label>
+  );
+};
