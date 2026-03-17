@@ -1,9 +1,12 @@
+import TaskCard from "./components/TaskCard";
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import { HelloWorld, IHelloWorldProps } from "./HelloWorld";
 import * as React from "react";
+import { Task, User } from "./types";
 
 export class CustomGallery implements ComponentFramework.ReactControl<IInputs, IOutputs> {
     private notifyOutputChanged: () => void;
+    private output: string;
 
     /**
      * Empty constructor.
@@ -33,18 +36,92 @@ export class CustomGallery implements ComponentFramework.ReactControl<IInputs, I
      * @returns ReactElement root react element for the control
      */
     public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: 'Power Apps' };
+
+    //     const user: User = {
+    //         id: "1",
+    //         name: "Liam Desmond",
+    //         profileImage: "https://randomuser.me/api/portraits/men/1.jpg"
+    //     }
+
+    //     const tasks: Task[] = [
+    //         {
+    //             id: "1",
+    //             userId: "1",
+    //             title: "Task 1",
+    //             category: "Ready",
+    //             estimate: "2H",
+    //             status: "Done",
+    //             estimatedHours: 4,
+    //             spentHours: 2
+    //         }
+    // ]
+    const users: Record<string, User> = {};
+    const tasksByUser: Record<string, Task[]> = {};
+
+    if(context?.parameters?.tasks?.records) {
+        for(const Id in context.parameters.users.records) {
+            const record = context.parameters.users.records[Id];
+            const userId = record.getValue("id") as string;
+            console.log(record.getValue("id"));
+            console.log(record.getValue("name"));
+
+            users[userId] = {
+                id: userId,
+                name: record.getValue("name") as string,
+                profileImage: record.getValue("profileImage") as string
+            }
+            tasksByUser[userId] = [];
+        }
+         };
+
+        if (context?.parameters?.tasks?.records) {
+      for (const Id in context.parameters.tasks.records) {
+        const recordTaskValue = context.parameters.tasks.records[Id]
+        const userId = (recordTaskValue.getValue("userId") as string) || ""
+        if (!userId || !users[userId]) continue
+
+        const task: Task = {
+          id: recordTaskValue.getValue("id") as string,
+          userId: userId,
+          title: recordTaskValue.getValue("title") as string,
+          category: recordTaskValue.getValue("category") as
+            | "Ready"
+            | "In Progress"
+            | "Review",
+          estimate: recordTaskValue.getValue("estimate") as string,
+          status:
+            (recordTaskValue.getValue("status") as string) === "Done"
+              ? "Done"
+              : "Not Done",
+          estimatedHours:
+            (recordTaskValue.getValue("estimatedHours") as number) || 0,
+          spentHours: (recordTaskValue.getValue("spentHours") as number) || 0,
+        }
+        tasksByUser[userId].push(task)
+      }
+    }
+
+
+
         return React.createElement(
-            HelloWorld, props
+            TaskCard, {tasks: tasksByUser[Object.keys(users)[0]] || [], user: users[Object.keys(users)[0]], expanded: true}
         );
     }
+
+    private updateValue(value: string) {
+        this.output = value;
+        this.notifyOutputChanged();
+    }
+    
 
     /**
      * It is called by the framework prior to a control receiving new data.
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
      */
     public getOutputs(): IOutputs {
-        return { };
+        return { 
+            sampleProperty: this.output
+        };
     }
 
     /**

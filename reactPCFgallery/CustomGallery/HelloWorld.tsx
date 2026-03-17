@@ -1,14 +1,15 @@
 import * as React from 'react';
-import { Label } from '@fluentui/react-components';
+import { Input, Label } from '@fluentui/react-components';
 
 export interface IHelloWorldProps {
   name?: string;
 }
 
-export const HelloWorld = (props: IHelloWorldProps) => {
+export const HelloWorld = ({name}: IHelloWorldProps) => {
+  console.log("Test");
+  
   return (
-    <Label>
-      Hello {props.name}!
-    </Label>
+    <Input value={name}
+    />
   );
 };

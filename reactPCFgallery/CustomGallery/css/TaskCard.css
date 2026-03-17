@@ -1,0 +1,115 @@
+.task-card {
+  width: 320px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: "Poppins";
+  text-align: center;
+  max-height: 1000px;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.task-card.collapsed {
+  max-height: 40px;
+}
+.task-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.toggle-icon {
+  font-size: 16px;
+  color: #dddd;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+.toggle-icon:hover {
+  transform: scale(1.1);
+}
+.task-counts {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  margin-top: 12px;
+  color: #fff;
+}
+.count {
+  font-size: 20px;
+  color: #f8d7da;
+}
+.count.done {
+  color: #28a745;
+}
+.label {
+  font-size: 12px;
+  color: #3f3f3f;
+  opacity: 0.8;
+}
+.progress-circle {
+  width: 80px;
+  margin: 0 auto 8px;
+}
+.progress-bar {
+  height: 10px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+.progress-bar-segment {
+  height: 100%;
+}
+
+.hours-info {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-top: 8px;
+  color: #3f3f3f;
+}
+.task-category {
+  margin-top: 12px;
+  text-align: left;
+}
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 6px;
+  border-radius: 6px;
+  font-family: "Poppins" sans-serif;
+  background: rgba(255, 255, 255, 0.2);
+}
+.category-toggle-icon {
+  font-size: 16px;
+  color: #dddd;
+  transition: transform 0.3s;
+}
+.category-toggle-icon:hover {
+  transform: scale(1.1);
+}
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin: 4px 8px;
+  padding: 4px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  font-family: "Poppins", sans-serif;
+  color: #3f3f3f;
+}
+.task-time {
+  opacity: 0.8;
+}

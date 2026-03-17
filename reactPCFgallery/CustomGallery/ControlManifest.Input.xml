@@ -30,6 +30,11 @@
       </type-group>
       <property name="sampleProperty" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type-group="numbers" usage="bound" required="true" />
     -->
+
+    <data-set name="tasks" display-name-key="Tasks" description-key="Tasks description" />
+    <data-set name="users" display-name-key="Users" description-key="Users description" />
+
+
     <resources>
       <code path="index.ts" order="1"/>
       <platform-library name="React" version="16.14.0" />
