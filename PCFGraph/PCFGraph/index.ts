@@ -1,59 +1,113 @@
-import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import { HelloWorld, IHelloWorldProps } from "./HelloWorld";
+import { IInputs } from "./generated/ManifestTypes";
 import * as React from "react";
-import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
-type DataSet = ComponentFramework.PropertyTypes.DataSet;
+import * as ReactDOM from "react-dom";
+import { PercentageChart } from "./components/PercentageChart";
+import { ChartData, TableSummary } from "./ChartTypes";
 
-export class PCFGraph implements ComponentFramework.ReactControl<IInputs, IOutputs> {
-    private notifyOutputChanged: () => void;
+export class PCFGraph implements ComponentFramework.StandardControl<IInputs, Record<string, unknown>> {
+  private container: HTMLDivElement;
+  private context!: ComponentFramework.Context<IInputs>;
 
-    /**
-     * Empty constructor.
-     */
-    constructor() {
-        // Empty
+  public init(
+    context: ComponentFramework.Context<IInputs>,
+    notifyOutputChanged: () => void,
+    state: ComponentFramework.Dictionary,
+    container: HTMLDivElement
+  ): void {
+    this.context = context;
+    this.container = container;
+    this.renderLoading();
+    void this.loadChartData();
+  }
+
+  public updateView(context: ComponentFramework.Context<IInputs>): void {
+    this.context = context;
+  }
+
+  public getOutputs(): Record<string, unknown> {
+    return {};
+  }
+
+  public destroy(): void {
+    ReactDOM.unmountComponentAtNode(this.container);
+  }
+
+  private renderLoading(): void {
+    ReactDOM.render(
+      React.createElement("div", null, "Loading chart..."),
+      this.container
+    );
+  }
+
+  private renderChart(data: ChartData[]): void {
+    const title = this.context.parameters.chartTitle?.raw ?? "Dataverse Summary";
+    ReactDOM.render(
+      React.createElement(PercentageChart, { title, data }),
+      this.container
+    );
+  }
+
+  private async loadChartData(): Promise<void> {
+    try {
+      const summaries: TableSummary[] = [
+        {
+          tableLogicalName: "opportunity",
+          label: "Open Opportunities",
+          value: await this.getOpenOpportunityCount()
+        },
+        {
+          tableLogicalName: "incident",
+          label: "Active Cases",
+          value: await this.getActiveCaseCount()
+        },
+        {
+          tableLogicalName: "lead",
+          label: "Open Leads",
+          value: await this.getOpenLeadCount()
+        }
+      ];
+
+      const total = summaries.reduce((sum, item) => sum + item.value, 0);
+
+      const chartData: ChartData[] = summaries.map((item) => ({
+        name: item.label,
+        value: total > 0 ? Math.round((item.value / total) * 100) : 0
+      }));
+
+      this.renderChart(chartData);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      ReactDOM.render(
+        React.createElement("div", null, `Failed to load chart: ${message}`),
+        this.container
+      );
     }
+  }
 
-    /**
-     * Used to initialize the control instance. Controls can kick off remote server calls and other initialization actions here.
-     * Data-set values are not initialized here, use updateView.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to property names defined in the manifest, as well as utility functions.
-     * @param notifyOutputChanged A callback method to alert the framework that the control has new outputs ready to be retrieved asynchronously.
-     * @param state A piece of data that persists in one session for a single user. Can be set at any point in a controls life cycle by calling 'setControlState' in the Mode interface.
-     */
-    public init(
-        context: ComponentFramework.Context<IInputs>,
-        notifyOutputChanged: () => void,
-        state: ComponentFramework.Dictionary
-    ): void {
-        this.notifyOutputChanged = notifyOutputChanged;
-    }
+  private async getOpenOpportunityCount(): Promise<number> {
+    const result = await this.context.webAPI.retrieveMultipleRecords(
+      "opportunity",
+      "?$select=opportunityid&$filter=statecode eq 0"
+    );
 
-    /**
-     * Called when any value in the property bag has changed. This includes field values, data-sets, global values such as container height and width, offline status, control metadata values such as label, visible, etc.
-     * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
-     * @returns ReactElement root react element for the control
-     */
-    public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
-        const props: IHelloWorldProps = { name: 'Power Apps' };
-        return React.createElement(
-            HelloWorld, props
-        );
-    }
+    return result.entities.length;
+  }
 
-    /**
-     * It is called by the framework prior to a control receiving new data.
-     * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
-     */
-    public getOutputs(): IOutputs {
-        return {};
-    }
+  private async getActiveCaseCount(): Promise<number> {
+    const result = await this.context.webAPI.retrieveMultipleRecords(
+      "incident",
+      "?$select=incidentid&$filter=statecode eq 0"
+    );
 
-    /**
-     * Called when the control is to be removed from the DOM tree. Controls should use this call for cleanup.
-     * i.e. cancelling any pending remote calls, removing listeners, etc.
-     */
-    public destroy(): void {
-        // Add code to cleanup control if necessary
-    }
+    return result.entities.length;
+  }
+
+  private async getOpenLeadCount(): Promise<number> {
+    const result = await this.context.webAPI.retrieveMultipleRecords(
+      "lead",
+      "?$select=leadid&$filter=statecode eq 0"
+    );
+
+    return result.entities.length;
+  }
 }
