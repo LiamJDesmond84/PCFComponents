@@ -21,8 +21,10 @@ export class PCFGraph implements ComponentFramework.StandardControl<IInputs, Rec
   }
 
   public updateView(context: ComponentFramework.Context<IInputs>): void {
-    this.context = context;
-  }
+  this.context = context;
+  this.renderLoading();
+  void this.loadChartData();
+}
 
   public getOutputs(): Record<string, unknown> {
     return {};
@@ -51,19 +53,19 @@ export class PCFGraph implements ComponentFramework.StandardControl<IInputs, Rec
     try {
       const summaries: TableSummary[] = [
         {
-          tableLogicalName: "opportunity",
+          tableLogicalName: "task",
           label: "Open Opportunities",
-          value: await this.getOpenOpportunityCount()
+          value: await this.getTaskCount()
         },
         {
-          tableLogicalName: "incident",
-          label: "Active Cases",
-          value: await this.getActiveCaseCount()
+          tableLogicalName: "team",
+          label: "Team Membership",
+          value: await this.getTeamCount()
         },
         {
-          tableLogicalName: "lead",
-          label: "Open Leads",
-          value: await this.getOpenLeadCount()
+          tableLogicalName: "crae5_application",
+          label: "Open Applications",
+          value: await this.getApplicationCount()
         }
       ];
 
@@ -84,28 +86,28 @@ export class PCFGraph implements ComponentFramework.StandardControl<IInputs, Rec
     }
   }
 
-  private async getOpenOpportunityCount(): Promise<number> {
+  private async getTaskCount(): Promise<number> {
     const result = await this.context.webAPI.retrieveMultipleRecords(
-      "opportunity",
-      "?$select=opportunityid&$filter=statecode eq 0"
+      "task",
+      "?$select=processid&$filter=statecode eq 0"
     );
 
     return result.entities.length;
   }
 
-  private async getActiveCaseCount(): Promise<number> {
+  private async getTeamCount(): Promise<number> {
     const result = await this.context.webAPI.retrieveMultipleRecords(
-      "incident",
-      "?$select=incidentid&$filter=statecode eq 0"
+      "team",
+      "?$select=teamid&$filter=membershiptype eq 0"
     );
 
     return result.entities.length;
   }
 
-  private async getOpenLeadCount(): Promise<number> {
+  private async getApplicationCount(): Promise<number> {
     const result = await this.context.webAPI.retrieveMultipleRecords(
-      "lead",
-      "?$select=leadid&$filter=statecode eq 0"
+      "crae5_application",
+      "?$select=crae5_applicationid&$filter=statecode eq 0"
     );
 
     return result.entities.length;
