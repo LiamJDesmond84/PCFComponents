@@ -11,8 +11,18 @@ export interface IGraphProps {
 const Graph: React.FC<IGraphProps> = ({ context }) => {
     const [activities, setActivities] = useState<{ name: string; value: number }[]>([]);
     const [error, setError] = useState<string>("");
+    const [accountName, setAccountName] = useState<string>("");
 
-    const COLORS = ["#0078d4", "#107c10", "#d13438", "#ff8c00", "#5c2d91"];
+    const defaultColors = ["#0078d4", "#107c10", "#d13438", "#ff8c00", "#5c2d91"];
+
+    const colorInput = context.parameters.chartColors.raw ?? "";
+
+    const chartColors = colorInput
+    .split(",")
+    .map(c => c.trim())
+    .filter(c => c.length > 0);
+
+    const colors = chartColors.length > 0 ? chartColors : defaultColors;
 
     useEffect(() => {
         const loadActivities = async (): Promise<void> => {
@@ -21,6 +31,15 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 // STEP 1: Get the current Account ID from the form context
                 const accountId = ((context.mode as { contextInfo?: { entityId?: string } }).contextInfo?.entityId ?? "").replace(/[{}]/g, "");
 
+                if (!accountId) {
+                setActivities([]);
+                setError("");
+                return;
+                }
+
+                const accountName: { name?: string } = await context.webAPI.retrieveRecord("account", accountId, "?$select=name");
+                setAccountName(accountName.name ?? "Unknown Account");
+
                 // -----------------------------
                 // STEP 2: Get all Contacts related to this Account
                 // We are querying the contact table where parentcustomerid = accountId
@@ -28,7 +47,7 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 // -----------------------------
                 const contacts = await context.webAPI.retrieveMultipleRecords(
                     "contact",
-                    `?$select=contactid&$filter=_parentcustomerid_value eq ${accountId}`
+                    `?$select=contactid&$filter=_parentcustomerid_value eq '${accountId}'`
                 );
 
                 // cast once
@@ -43,7 +62,7 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 // -----------------------------
                 const ids = [accountId, ...contactIds];
 
-                const filter = ids.map(id => `_partyid_value eq ${id}`).join(" or ");
+                const filter = ids.map(id => `_partyid_value eq '${id}'`).join(" or ");
 
                 // -----------------------------
                 // STEP 4: Query activityparty to find activities related to those IDs
@@ -134,6 +153,11 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
     }
 
     else return (
+        <>
+        <div style={{display: "flex", flexDirection: "column"}}>
+            <h3>Activity Count for <span style={{color: "red"}}>{accountName}</span></h3>
+            <h5>Viewing as: {context.userSettings.userName}</h5>
+
         <PieChart width={420} height={320}>
             <Pie
                 data={activities}
@@ -143,12 +167,14 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 label={({ name, value }) => `${name}: ${value}`}
             >
                 {activities.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={index} fill={colors[index % colors.length]} />
                 ))}
             </Pie>
             <Tooltip />
             <Legend />
         </PieChart>
+        </div>
+        </>
     )
 
 };
