@@ -16,7 +16,7 @@ export class AccountActivitiesGraph
         this.context = context;
 
         const props: IGraphProps = {
-        context: this.context
+            context: this.context
         };
 
         return React.createElement(Graph, props);
