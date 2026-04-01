@@ -19,9 +19,7 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
             try {
 
                 // STEP 1: Get the current Account ID from the form context
-                const accountId = (
-                    (context.mode as { contextInfo?: { entityId?: string } }).contextInfo?.entityId ?? ""
-                ).replace(/[{}]/g, "");
+                const accountId = ((context.mode as { contextInfo?: { entityId?: string } }).contextInfo?.entityId ?? "").replace(/[{}]/g, "");
 
                 // -----------------------------
                 // STEP 2: Get all Contacts related to this Account
@@ -45,9 +43,7 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 // -----------------------------
                 const ids = [accountId, ...contactIds];
 
-                const filter = ids
-                    .map(id => `_partyid_value eq ${id}`)
-                    .join(" or ");
+                const filter = ids.map(id => `_partyid_value eq ${id}`).join(" or ");
 
                 // -----------------------------
                 // STEP 4: Query activityparty to find activities related to those IDs
@@ -62,7 +58,7 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
                 );
 
                 // -----------------------------
-                // STEP 5: Extract and dedupe activities
+                // STEP 5: Extract and deduplicate activities
                 // Each activity can appear multiple times (multiple participants)
                 // So we remove duplicates using activityid
                 // -----------------------------
