@@ -8,25 +8,19 @@ export class AccountActivitiesGraph
 {
   private context!: ComponentFramework.Context<IInputs>;
 
-  public init(
-    context: ComponentFramework.Context<IInputs>,
-    notifyOutputChanged: () => void,
-    state: ComponentFramework.Dictionary
-  ): void {
-    this.context = context;
-  }
+    public init(context: ComponentFramework.Context<IInputs>,notifyOutputChanged: () => void,state: ComponentFramework.Dictionary): void {
+        this.context = context;
+    }
 
-  public updateView(
-    context: ComponentFramework.Context<IInputs>
-  ): React.ReactElement {
-    this.context = context;
+    public updateView(context: ComponentFramework.Context<IInputs>): React.ReactElement {
+        this.context = context;
 
-    const props: IGraphProps = {
-      context: this.context
-    };
+        const props: IGraphProps = {
+        context: this.context
+        };
 
-    return React.createElement(Graph, props);
-  }
+        return React.createElement(Graph, props);
+    }
 
   public getOutputs(): IOutputs {
     return {};
