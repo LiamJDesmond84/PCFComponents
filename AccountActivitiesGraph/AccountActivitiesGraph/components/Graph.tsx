@@ -38,9 +38,10 @@ const Graph: React.FC<IGraphProps> = ({ context }) => {
 
                 // -----------------------------
                 // STEP 3: Build filter for activityparty
-                // Since OData can't join tables, we create an OR filter like:
-                // _partyid_value eq contact1 OR contact2 OR contact3...
-                // Optionally include the accountId as well
+                // We still need this filter even though we use $expand.
+                // $expand only brings back related activity data for the rows we already matched.
+                // It does NOT automatically limit activityparty rows to this account's contacts.
+                // So this filter is what keeps the query scoped to the current account/contact set.
                 // -----------------------------
                 const ids = [accountId, ...contactIds];
 
